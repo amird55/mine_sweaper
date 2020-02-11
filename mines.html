@@ -86,10 +86,46 @@
             if(brd[r][c]==1){
                 showFinished();
             } else {
-                brd[r][c]=10;
+                if(brd[r][c] < 10){
+                    brd[r][c]+=10;
+                    if(nbr[r][c]==0){
+                        expandZero(r,c);
+                    }
+                }
                 showBoard();
             }
         }
+        function expandZero(r,c){
+            var min_r=r-1;
+            if(min_r<0){
+                min_r=0;
+            }
+            var min_c=c-1;
+            if(min_c<0){
+                min_c=0;
+            }
+            var max_r=r+1;
+            if(max_r>size-1){
+                max_r=size-1;
+            }
+            var max_c=c+1;
+            if(max_c>size-1){
+                max_c=size-1;
+            }
+            for(var row=min_r;row<=max_r;row++){
+                for(var col=min_c;col<=max_c;col++){
+                    if(brd[row][col] < 10){
+                        brd[row][col]+=10;
+                        if(nbr[row][col]==0){
+                            expandZero(row,col);
+                        }
+                    }
+                    
+                }
+            }
+            
+        }
+
         function showBoard(){
             var str="";
             str+="<table>";
