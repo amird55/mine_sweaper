@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        td{
+            border: 1px solid black;
+            width: 20px;
+            height: 20px;
+        }
+        td:hover{
+            background-color: lightgreen;
+        }
+        .rd{
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="brd"></div>
+    <script>
+        var size=8;
+        var brd=[];
+        var nbr=[];
+        function initBoard(){
+            var cell;
+            var num=0;
+            for(var row=0;row<size;row++){
+                var line=[];
+                for(var col=0;col<size;col++){
+                    if(Math.random()*100 < 20){
+                        cell=(num < 10)?1:0;
+                        num++;
+                    } else {
+                        cell=0;
+                    }
+                    line.push(cell);
+                }
+                brd.push(line);
+            }
+            console.log(brd);
+        }
+        function calcNbrNum(r,c){
+            var sum=0;
+            var min_r=r-1;
+            if(min_r<0){
+                min_r=0;
+            }
+            var min_c=c-1;
+            if(min_c<0){
+                min_c=0;
+            }
+            var max_r=r+1;
+            if(max_r>size-1){
+                max_r=size-1;
+            }
+            var max_c=c+1;
+            if(max_c>size-1){
+                max_c=size-1;
+            }
+            for(var row=min_r;row<=max_r;row++){
+                for(var col=min_c;col<=max_c;col++){
+                    sum+=brd[row][col];
+                }
+            }
+            sum -=brd[r][c];
+            
+            return sum;
+        }
+        function initNbrs(){
+            var cell;
+            for(var row=0;row<size;row++){
+                var line=[];
+                for(var col=0;col<size;col++){
+                    cell=calcNbrNum(row,col);
+                    line.push(cell);
+                }
+                nbr.push(line);
+            }
+            
+        }
+        function prs(r,c){
+            if(brd[r][c]==1){
+                showFinished();
+            } else {
+                brd[r][c]=10;
+                showBoard();
+            }
+        }
+        function showBoard(){
+            var str="";
+            str+="<table>";
+            for(var row=0;row<size;row++){
+                str+="<tr>";
+                for(var col=0;col<size;col++){
+                    // if(brd[row][col]==1){
+                    //     str+="<td class='rd'>";
+                    // } else {
+                        str+="<td onclick='prs("+row+","+col+")'>";
+                    // }
+                    if(brd[row][col]==10){
+                        str+=nbr[row][col];
+                    }
+                    str+="</td>";
+                }
+                str+="</tr>";
+            }
+            str+="<table>";     
+            document.getElementById("brd").innerHTML=str;
+        }
+        function showFinished(){
+            var str="";
+            str+="<table>";
+            for(var row=0;row<size;row++){
+                str+="<tr>";
+                for(var col=0;col<size;col++){
+                    if(brd[row][col]==1){
+                        str+="<td class='rd'>";
+                    } else {
+                        str+="<td>";
+                    }
+                    if(brd[row][col]==10){
+                        str+=nbr[row][col];
+                    }
+                    str+="</td>";
+                }
+                str+="</tr>";
+            }
+            str+="<table>";     
+            document.getElementById("brd").innerHTML=str;
+        }
+
+        initBoard();
+        initNbrs();
+        showBoard();
+    </script>
+</body>
+</html>
